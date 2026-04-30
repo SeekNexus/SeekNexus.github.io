@@ -1,3 +1,15 @@
+# Ensure chat panel is always on top when open
+#sn-chat-panel.open {
+  z-index: 100000 !important;
+}
+
+/* Chat messages scrollable */
+#sn-chat-messages {
+  max-height: 320px;
+  min-height: 120px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
 /* ---- Chat Widget Always On Top ---- */
 #sn-chat-widget,
 #sn-chat-widget * {

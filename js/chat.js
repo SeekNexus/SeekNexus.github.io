@@ -1,3 +1,4 @@
+
 // ============================================================
 // SEEK NEXUS — AI Chat Widget
 // Proxied through Cloudflare Worker (API key stays server-side)
@@ -7,13 +8,11 @@
 //   https://seek-nexus-ai.YOUR-NAME.workers.dev
 // ============================================================
 
-const PROXY_URL = 'https://bold-glade-7f61.tim-e-flinn.workers.dev';
 
-let CLIENT_NAME = '';
+function getSystemPrompt(name) {
+  return `You are a helpful AI assistant for Seek Nexus (www.seek-nexus.com), a full-service technology company.
 
-const SYSTEM_PROMPT = `You are a helpful AI assistant for Seek Nexus (www.seek-nexus.com), a full-service technology company.
-
-the person you are speaking with is ${CLIENT_NAME}, a potential customer interested in Seek Nexus's services.
+The person you are speaking with is ${name ? escapeHtml(name) : 'a potential customer'}, interested in Seek Nexus's services.
 
 Services offered:
 - Networking & low voltage installations (long-range wireless bridges, TP-Link Omada systems, structured cabling)
@@ -23,6 +22,7 @@ Services offered:
 - Custom AI agent integration for customer support
 
 Keep answers concise, friendly, and professional. Help visitors understand the services, answer questions, and encourage them to fill out the contact form for a free quote. If asked about pricing, say it varies by project and invite them to request a free quote.`;
+}
 
 // ---- State ----
 const chatHistory = []; // { role, content }
@@ -92,7 +92,7 @@ function saveUserInfo() {
   setCookie('sn_user_email', userEmail, 30);
   userForm.style.display = 'none';
   document.getElementById('sn-chat-main').style.display = 'block';
-  // Greet the user
+  // Get the user name to use in prompt
   CLIENT_NAME = escapeHtml(userName);
   setTimeout(() => input.focus(), 100);
 }
@@ -136,7 +136,10 @@ function addMessage(role, text) {
   div.className = `sn-msg sn-msg-${role === 'user' ? 'user' : 'bot'}`;
   div.innerHTML = `<span>${escapeHtml(text)}</span>`;
   messages.appendChild(div);
-  messages.scrollTop = messages.scrollHeight;
+  // Always scroll to bottom after new message
+  setTimeout(() => {
+    messages.scrollTop = messages.scrollHeight;
+  }, 10);
   return div;
 }
 
@@ -189,7 +192,7 @@ async function sendMessage() {
       },
       body: JSON.stringify({
         messages: [
-          { role: 'system', content: SYSTEM_PROMPT },
+          { role: 'system', content: getSystemPrompt(userName) },
           ...chatHistory
         ],
         max_tokens: 300,
