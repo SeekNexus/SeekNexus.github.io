@@ -1,3 +1,4 @@
+const PROXY_URL = 'https://bold-glade-7f61.tim-e-flinn.workers.dev';
 
 // ============================================================
 // SEEK NEXUS — AI Chat Widget
