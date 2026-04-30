@@ -1,0 +1,9 @@
+# Cloudflare Worker (contains API key — deploy manually via dashboard)
+cloudflare-worker.js
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
