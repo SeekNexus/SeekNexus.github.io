@@ -32,25 +32,44 @@ const closeBtn    = document.getElementById('sn-chat-close-btn');
 const messages    = document.getElementById('sn-chat-messages');
 const input       = document.getElementById('sn-chat-input');
 const sendBtn     = document.getElementById('sn-chat-send');
-const userModal   = document.getElementById('sn-chat-user-modal');
+const userForm    = document.getElementById('sn-chat-user-form');
 const userNameInput = document.getElementById('sn-user-name');
 const userEmailInput = document.getElementById('sn-user-email');
 const userSaveBtn = document.getElementById('sn-user-save');
 
-// ---- Toggle panel ----
 
+// ---- Cookie helpers ----
+function setCookie(name, value, days) {
+  let expires = '';
+  if (days) {
+    const date = new Date();
+    date.setTime(date.getTime() + (days*24*60*60*1000));
+    expires = '; expires=' + date.toUTCString();
+  }
+  document.cookie = name + '=' + encodeURIComponent(value) + expires + '; path=/';
+}
+function getCookie(name) {
+  const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+  return match ? decodeURIComponent(match[2]) : '';
+}
+
+// ---- Toggle panel ----
 function openChat() {
   panel.classList.add('open');
   toggle.style.display = 'none';
-  // If user info not set, show modal
+  userName = getCookie('sn_user_name') || '';
+  userEmail = getCookie('sn_user_email') || '';
   if (!userName || !userEmail) {
-    userModal.style.display = 'flex';
+    userForm.style.display = 'block';
+    document.getElementById('sn-chat-main').style.display = 'none';
     setTimeout(() => userNameInput.focus(), 100);
   } else {
+    userForm.style.display = 'none';
+    document.getElementById('sn-chat-main').style.display = 'block';
     input.focus();
   }
 }
-// Handle user info modal
+
 userSaveBtn.addEventListener('click', saveUserInfo);
 userNameInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') saveUserInfo(); });
 userEmailInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') saveUserInfo(); });
@@ -65,8 +84,13 @@ function saveUserInfo() {
   }
   userName = name;
   userEmail = email;
-  userModal.style.display = 'none';
-  input.focus();
+  setCookie('sn_user_name', userName, 30);
+  setCookie('sn_user_email', userEmail, 30);
+  userForm.style.display = 'none';
+  document.getElementById('sn-chat-main').style.display = 'block';
+  // Greet the user
+  addMessage('assistant', `Hi ${escapeHtml(userName)}!`);
+  setTimeout(() => input.focus(), 100);
 }
 
 function validateEmail(email) {
@@ -141,8 +165,7 @@ async function sendMessage() {
   const text = input.value.trim();
   if (!text) return;
   if (!userName || !userEmail) {
-    userModal.style.display = 'flex';
-    setTimeout(() => userNameInput.focus(), 100);
+    openChat();
     return;
   }
 

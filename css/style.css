@@ -1,3 +1,15 @@
+/* ---- Chat Widget Always On Top ---- */
+#sn-chat-widget,
+#sn-chat-widget * {
+  z-index: 99999 !important;
+}
+
+#sn-chat-widget {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  /* Existing styles will be preserved */
+}
 /* ============================================================
    SEEK NEXUS — Global Styles
    Dark tech theme | Orange & Blue | Mobile-first
