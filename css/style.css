@@ -78,6 +78,23 @@ a:hover { color: var(--blue); }
 .sn-btn-primary:hover { opacity: 0.88; transform: translateY(-2px); color: #fff; }
 
 .sn-btn-outline {
+/* ---- Chat Modal ---- */
+.sn-modal {
+  position: fixed;
+  z-index: 9999;
+  left: 0; top: 0; width: 100vw; height: 100vh;
+  background: rgba(10,12,16,0.85);
+  display: flex; align-items: center; justify-content: center;
+}
+.sn-modal-content {
+  background: var(--bg-card);
+  border-radius: 12px;
+  box-shadow: 0 6px 32px 0 #0008;
+  padding: 2rem 2.2rem 1.5rem 2.2rem;
+  min-width: 320px;
+  max-width: 90vw;
+  color: var(--text);
+}
   background: transparent;
   color: var(--blue);
   border: 1.5px solid var(--blue);

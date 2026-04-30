@@ -7,3 +7,13 @@ Thumbs.db
 
 # Editor
 .vscode/
+
+# Node/npm artifacts (if ever used)
+node_modules/
+
+# OS junk
+*.log
+
+# Misc
+*.swp
+*.swo

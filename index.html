@@ -237,6 +237,17 @@
       <i class="bi bi-stars"></i>
     </button>
     <div id="sn-chat-panel" aria-live="polite">
+      <!-- Name/Email Modal -->
+      <div id="sn-chat-user-modal" class="sn-modal" style="display:none;">
+        <div class="sn-modal-content">
+          <h5 class="mb-2">Start Chat</h5>
+          <div class="mb-2">
+            <input id="sn-user-name" class="form-control sn-input mb-2" type="text" placeholder="Your Name" maxlength="60" required />
+            <input id="sn-user-email" class="form-control sn-input" type="email" placeholder="Email Address" maxlength="100" required />
+          </div>
+          <button id="sn-user-save" class="btn sn-btn-primary w-100">Start Chat</button>
+        </div>
+      </div>
       <div id="sn-chat-header">
         <div class="sn-chat-avatar"><i class="bi bi-stars"></i></div>
         <div>
