@@ -1,0 +1,5 @@
+User-agent: *
+Disallow: /admin/
+Disallow: /cgi-bin/
+Allow: /
+Sitemap: https://www.seek-nexus.com/sitemap.xml
