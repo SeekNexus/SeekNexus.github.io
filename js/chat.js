@@ -7,7 +7,7 @@
 //   https://seek-nexus-ai.YOUR-NAME.workers.dev
 // ============================================================
 
-const PROXY_URL = 'YOUR_CLOUDFLARE_WORKER_URL';
+const PROXY_URL = 'https://bold-glade-7f61.tim-e-flinn.workers.dev';
 
 const SYSTEM_PROMPT = `You are a helpful AI assistant for Seek Nexus (www.seek-nexus.com), a full-service technology company.
 
