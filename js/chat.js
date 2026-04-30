@@ -9,9 +9,11 @@
 
 const PROXY_URL = 'https://bold-glade-7f61.tim-e-flinn.workers.dev';
 
+let CLIENT_NAME = '';
+
 const SYSTEM_PROMPT = `You are a helpful AI assistant for Seek Nexus (www.seek-nexus.com), a full-service technology company.
 
-Name of person you're chatting with: ${escapeHtml(userName)}
+the person you are speaking with is ${CLIENT_NAME}, a potential customer interested in Seek Nexus's services.
 
 Services offered:
 - Networking & low voltage installations (long-range wireless bridges, TP-Link Omada systems, structured cabling)
@@ -90,6 +92,8 @@ function saveUserInfo() {
   setCookie('sn_user_email', userEmail, 30);
   userForm.style.display = 'none';
   document.getElementById('sn-chat-main').style.display = 'block';
+  // Greet the user
+  CLIENT_NAME = escapeHtml(userName);
   setTimeout(() => input.focus(), 100);
 }
 
