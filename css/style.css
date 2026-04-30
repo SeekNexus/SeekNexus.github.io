@@ -95,10 +95,6 @@ a:hover { color: var(--blue); }
   max-width: 90vw;
   color: var(--text);
 }
-.sn-modal-sub {
-  color: var(--text-muted);
-  font-size: 0.92rem;
-}
   background: transparent;
   color: var(--blue);
   border: 1.5px solid var(--blue);
