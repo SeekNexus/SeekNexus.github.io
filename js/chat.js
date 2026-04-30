@@ -24,6 +24,7 @@ Keep answers concise, friendly, and professional. Help visitors understand the s
 const chatHistory = []; // { role, content }
 let userName = '';
 let userEmail = '';
+const USER_NAME_COOKIE = 'sn_user_name';
 
 // ---- DOM refs ----
 const toggle      = document.getElementById('sn-chat-toggle');
@@ -32,25 +33,30 @@ const closeBtn    = document.getElementById('sn-chat-close-btn');
 const messages    = document.getElementById('sn-chat-messages');
 const input       = document.getElementById('sn-chat-input');
 const sendBtn     = document.getElementById('sn-chat-send');
-const userModal   = document.getElementById('sn-chat-user-modal');
+const userPopup   = document.getElementById('sn-chat-user-popup');
 const userNameInput = document.getElementById('sn-user-name');
 const userEmailInput = document.getElementById('sn-user-email');
 const userSaveBtn = document.getElementById('sn-user-save');
 
+userName = getCookie(USER_NAME_COOKIE) || '';
+if (userName) {
+  userNameInput.value = userName;
+}
+
 // ---- Toggle panel ----
 
 function openChat() {
-  panel.classList.add('open');
-  toggle.style.display = 'none';
-  // If user info not set, show modal
+  // If user info is missing, ask in standalone popup first.
   if (!userName || !userEmail) {
-    userModal.style.display = 'flex';
+    userPopup.style.display = 'flex';
     setTimeout(() => userNameInput.focus(), 100);
   } else {
+    panel.classList.add('open');
+    toggle.style.display = 'none';
     input.focus();
   }
 }
-// Handle user info modal
+// Handle user info popup
 userSaveBtn.addEventListener('click', saveUserInfo);
 userNameInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') saveUserInfo(); });
 userEmailInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') saveUserInfo(); });
@@ -65,7 +71,10 @@ function saveUserInfo() {
   }
   userName = name;
   userEmail = email;
-  userModal.style.display = 'none';
+  setCookie(USER_NAME_COOKIE, userName, 30);
+  userPopup.style.display = 'none';
+  panel.classList.add('open');
+  toggle.style.display = 'none';
   input.focus();
 }
 
@@ -141,7 +150,7 @@ async function sendMessage() {
   const text = input.value.trim();
   if (!text) return;
   if (!userName || !userEmail) {
-    userModal.style.display = 'flex';
+    userPopup.style.display = 'flex';
     setTimeout(() => userNameInput.focus(), 100);
     return;
   }
@@ -209,3 +218,20 @@ input.addEventListener('keydown', (e) => {
     sendMessage();
   }
 });
+
+function setCookie(name, value, days) {
+  const expires = new Date(Date.now() + days * 24 * 60 * 60 * 1000).toUTCString();
+  document.cookie = `${name}=${encodeURIComponent(value)}; expires=${expires}; path=/; SameSite=Lax`;
+}
+
+function getCookie(name) {
+  const target = `${name}=`;
+  const cookies = document.cookie.split(';');
+  for (let i = 0; i < cookies.length; i += 1) {
+    const cookie = cookies[i].trim();
+    if (cookie.startsWith(target)) {
+      return decodeURIComponent(cookie.substring(target.length));
+    }
+  }
+  return '';
+}
