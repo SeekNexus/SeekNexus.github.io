@@ -125,6 +125,28 @@ async function closeChat() {
   }
 }
 
+// ---- Failsafe: Send chat log on page unload ----
+window.addEventListener('beforeunload', function () {
+  if (userName && userEmail && chatHistory.length > 0) {
+    const payload = JSON.stringify({
+      logToSheet: true,
+      user: { name: userName, email: userEmail },
+      log: chatHistory
+    });
+    // Use sendBeacon for reliability on unload
+    try {
+      const blob = new Blob([payload], { type: 'application/json' });
+      navigator.sendBeacon(PROXY_URL, blob);
+    } catch (e) {
+      // Fallback: synchronous XHR (not recommended, but last resort)
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', PROXY_URL, false);
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      try { xhr.send(payload); } catch (err) {}
+    }
+  }
+});
+
 toggle.addEventListener('click', () => {
   panel.classList.contains('open') ? closeChat() : openChat();
 });
